@@ -1,0 +1,8 @@
+[build]
+  publish = "dist"
+  command = "node generate_exact_site.js"
+
+[[redirects]]
+  from = "/admin"
+  to = "/admin/index.html"
+  status = 200
