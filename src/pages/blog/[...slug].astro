@@ -1,0 +1,136 @@
+---
+import { getCollection, render } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+  return posts.map((post) => ({
+    params: { slug: post.id },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+
+function formatDate(date: Date) {
+  return new Intl.DateTimeFormat('pl-PL', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric'
+  }).format(date);
+}
+---
+
+<Layout
+  title={`${post.data.title} | fizjoArt`}
+  description={post.data.description}
+  image={post.data.image}
+>
+  <article class="py-16 md:py-24 bg-white">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <!-- Breadcrumb -->
+      <nav class="flex items-center gap-2 text-xs sm:text-sm text-[#737373] mb-8 font-medium">
+        <a href="/" class="hover:text-brand-green transition-colors">Strona główna</a>
+        <span>/</span>
+        <a href="/blog" class="hover:text-brand-green transition-colors">Blog</a>
+        <span>/</span>
+        <span class="text-[#0a0a0a] truncate max-w-xs">{post.data.title}</span>
+      </nav>
+
+      <!-- Post Header -->
+      <header class="mb-12">
+        <div class="flex items-center gap-3 text-sm font-medium text-[#737373] mb-4">
+          <span class="px-3 py-1 bg-brand-green/10 text-brand-green rounded-full font-semibold text-xs">
+            {post.data.category}
+          </span>
+          <span>•</span>
+          <time datetime={post.data.pubDate.toISOString()}>
+            {formatDate(post.data.pubDate)}
+          </time>
+          <span>•</span>
+          <span>{post.data.author}</span>
+        </div>
+
+        <h1 class="font-serif text-3xl sm:text-5xl lg:text-6xl text-[#0a0a0a] font-normal leading-[1.15] mb-6">
+          {post.data.title}
+        </h1>
+
+        <p class="text-lg sm:text-xl text-[#737373] leading-relaxed italic border-l-2 border-brand-green pl-4">
+          {post.data.description}
+        </p>
+      </header>
+
+      <!-- Featured Image -->
+      <div class="rounded-2xl overflow-hidden mb-12 shadow-sm border border-[#e5e5e5] aspect-[16/9]">
+        <img
+          src={post.data.image}
+          alt={post.data.title}
+          class="w-full h-full object-cover"
+          loading="eager"
+        />
+      </div>
+
+      <!-- Article Content -->
+      <div class="article-content space-y-6 text-[#262626] text-lg leading-relaxed">
+        <Content />
+      </div>
+
+      <!-- Bottom Author Card -->
+      <div class="mt-16 pt-8 border-t border-[#eeeeee] flex items-center justify-between flex-wrap gap-4">
+        <div class="flex items-center gap-4">
+          <div class="w-12 h-12 rounded-full overflow-hidden bg-brand-green/10 border border-brand-green/20">
+            <img src="/images/ed20cAGCLeZHDCtWUAJaQqSchTk.png" alt="Artur Bania" class="w-full h-full object-cover" />
+          </div>
+          <div>
+            <h3 class="font-serif text-lg font-bold text-[#0a0a0a]">{post.data.author}</h3>
+            <p class="text-xs text-[#737373]">Fizjoterapeuta i Terapeuta Czaszkowo-Krzyżowy | Zielona Góra</p>
+          </div>
+        </div>
+
+        <a
+          href="/kontakt"
+          class="inline-flex items-center justify-center px-6 py-3 text-sm font-medium text-white bg-brand-green hover:bg-brand-green-light rounded-xl transition-all shadow-sm"
+        >
+          Umów konsultację
+        </a>
+      </div>
+    </div>
+  </article>
+</Layout>
+
+<style is:global>
+  .article-content h2 {
+    font-family: 'EB Garamond', Georgia, serif;
+    font-size: 2rem;
+    line-height: 1.25;
+    color: #0a0a0a;
+    margin-top: 2.5rem;
+    margin-bottom: 1rem;
+    font-weight: 500;
+  }
+
+  .article-content h3 {
+    font-family: 'EB Garamond', Georgia, serif;
+    font-size: 1.5rem;
+    color: #0a0a0a;
+    margin-top: 2rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .article-content p {
+    margin-bottom: 1.25rem;
+    line-height: 1.8;
+    color: #333333;
+  }
+
+  .article-content ul {
+    list-style-type: disc;
+    padding-left: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .article-content li {
+    margin-bottom: 0.5rem;
+  }
+</style>

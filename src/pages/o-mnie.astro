@@ -1,0 +1,104 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const certificates = [
+  { src: '/images/md3tQ4bbdEeSCf0iQJqMy4BZgLs.png', alt: 'Certyfikat Fizjoterapia i Terapia Czaszkowo-Krzyżowa' },
+  { src: '/images/EzJuQpGPffSI3XdIC1eXtrQZ01M.png', alt: 'Dyplom College of Cranio-Sacral Therapy' },
+  { src: '/images/arVHDDRC4aVSstO3s74a6vdqE.png', alt: 'Certyfikat Terapii Manualnej i Somatycznej' },
+  { src: '/images/ZSKBGMyjdSyJmYfgYZ2eQdN7fM.png', alt: 'Certyfikat Kursu Medycznego' },
+  { src: '/images/zC4cWuLIe05bVMWjyBWPtQmh7c0.png', alt: 'Certyfikat Szkolenia Specjalistycznego' },
+];
+---
+
+<Layout
+  title="Artur Bania – fizjoterapeuta | fizjoArt"
+  description="Poznaj Artura Banię – fizjoterapeutę i certyfikowanego terapeutę czaszkowo-krzyżowego pracującego w Zielonej Górze."
+>
+  <!-- HERO O MNIE -->
+  <section class="py-16 md:py-24 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="max-w-3xl mb-12">
+        <span class="text-xs uppercase tracking-wider font-semibold text-brand-green">O mnie</span>
+        <h1 class="font-serif text-4xl sm:text-5xl lg:text-6xl text-[#0a0a0a] font-normal mt-2 leading-tight">
+          Nazywam się Artur Bania.
+        </h1>
+        <p class="text-xl text-[#737373] mt-4 font-serif italic">
+          Z wykształcenia jestem magistrem fizjoterapii oraz certyfikowanym terapeutą czaszkowo-krzyżowym.
+        </p>
+      </div>
+
+      <!-- Main Bio & Photos -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+        <div class="lg:col-span-7 space-y-6 text-[#404040] text-base sm:text-lg leading-relaxed">
+          <p>
+            Jestem absolwentem <strong>Akademii Wychowania Fizycznego w Poznaniu</strong> oraz prestiżowego <strong>College of Cranio-Sacral Therapy w Londynie</strong>. Posiadam tytuł <em>Certyfikowanego Terapeuty Czaszkowo-Krzyżowego</em>.
+          </p>
+          <p>
+            <strong>Terapia Czaszkowo-Krzyżowa (CST)</strong> jest wywodzącą się z osteopatii, bardzo subtelną formą pracy z ciałem człowieka. Poświęcona jest leczeniu bólu fizycznego, emocjonalnego, chorób oraz bólu przewlekłego, urazów i stresu życia codziennego. CST znajduje również zastosowanie jako wspomaganie leczenia u osób zmagających się z trudnościami emocjonalnymi, stresem pourazowym, traumą czy przewlekłym zmęczeniem.
+          </p>
+          <p>
+            Doświadczenie zdobywałem w pracy z pacjentami z szerokim spektrum dolegliwości – od urazów sportowych, przez bóle kręgosłupa, po choroby cywilizacyjne. Uważam, że nie ma dwóch takich samych dolegliwości, a każdy człowiek jest wyjątkowy, wraz ze swoją historią, środowiskiem i potrzebami. Zdrowie jest wypadkową tych czynników, a terapia powinna być indywidualnie dobrana do aktualnego stanu zdrowia i dolegliwości, z jakimi zmaga się pacjent.
+          </p>
+          <p>
+            <strong>Człowieka postrzegam jako całość</strong> – leczenie odbywa się na poziomie ciała, emocji i psyche. Pracę z pacjentem rozpoczynam od wywiadu oraz badania przedmiotowego – diagnostyki. Pozwala mi to na lepsze poznanie i zrozumienie drugiego człowieka. Tłumaczę swój punkt widzenia oraz możliwe przyczyny dolegliwości, aby ułatwić pacjentowi zrozumienie istoty problemu, co pozwala na współuczestnictwo w procesie leczenia.
+          </p>
+          <p>
+            Od lat pracuję z dziećmi i młodzieżą, aktualnie pełniąc z dumą funkcję <strong>fizjoterapeuty w reprezentacji Polski WU-17</strong>. W gabinecie w Zielonej Górze przyjmuję pacjentów w każdym wieku.
+          </p>
+        </div>
+
+        <div class="lg:col-span-5 space-y-6">
+          <div class="rounded-2xl overflow-hidden border border-[#e5e5e5] shadow-md bg-white">
+            <img
+              src="/images/HaIemzWhLkszs0flVqmgBK6Wok.jpg"
+              alt="Artur Bania – gabinet fizjoterapii"
+              class="w-full h-auto object-cover"
+              loading="eager"
+            />
+          </div>
+          <div class="rounded-2xl overflow-hidden border border-[#e5e5e5] shadow-md bg-white">
+            <img
+              src="/images/6VEIUDCC8OqbZFDpyTMNbAKOE.jpg"
+              alt="Praca z pacjentem – Artur Bania"
+              class="w-full h-auto object-cover"
+              loading="lazy"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CERTYFIKATY I SZKOLENIA -->
+  <section class="py-20 md:py-28 bg-[#fafafa] border-t border-[#eeeeee]">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="max-w-3xl mb-16">
+        <span class="text-xs uppercase tracking-wider font-semibold text-brand-green">Kwalifikacje</span>
+        <h2 class="font-serif text-3xl sm:text-4xl lg:text-5xl text-[#0a0a0a] font-normal mt-2 mb-4">
+          Certyfikaty i ukończone szkolenia
+        </h2>
+        <p class="text-[#737373] text-lg leading-relaxed">
+          Nieustannie poszerzam wiedzę i umiejętności na certyfikowanych szkoleniach w Polsce i za granicą.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {certificates.map((cert) => (
+          <div class="bg-white p-4 rounded-2xl border border-[#e5e5e5] shadow-sm hover:shadow-md transition-all duration-200 group">
+            <div class="rounded-xl overflow-hidden bg-[#f5f5f5] flex items-center justify-center p-2 aspect-[4/3]">
+              <img
+                src={cert.src}
+                alt={cert.alt}
+                class="w-full h-full object-contain group-hover:scale-[1.02] transition-transform duration-200"
+                loading="lazy"
+              />
+            </div>
+            <p class="text-xs text-[#737373] text-center mt-3 font-medium">
+              {cert.alt}
+            </p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+</Layout>

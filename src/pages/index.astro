@@ -1,0 +1,301 @@
+---
+import Layout from '../layouts/Layout.astro';
+import FaqAccordion from '../components/FaqAccordion.astro';
+import Reviews from '../components/Reviews.astro';
+---
+
+<Layout
+  title="FizjoArt | Fizjoterapia i Terapia Czaszkowo-Krzyżowa Zielona Góra – Artur Bania"
+  description="Fizjoterapia i terapia czaszkowo-krzyżowa w Zielonej Górze. Artur Bania pomaga osobom zmagającym się z bólem, napięciem i skutkami przewlekłego stresu."
+>
+  <!-- HERO SECTION -->
+  <section class="relative pt-12 pb-20 md:pt-20 md:pb-32 overflow-hidden bg-gradient-to-b from-white via-[#fafafa] to-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+        <!-- Hero Text -->
+        <div class="lg:col-span-7 space-y-6">
+          <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-brand-green/10 text-brand-green text-xs sm:text-sm font-medium">
+            <span class="w-2 h-2 rounded-full bg-brand-green animate-pulse"></span>
+            <span>Przestrzeń, w której Twoje ciało może odetchnąć</span>
+          </div>
+
+          <h1 class="font-serif text-4xl sm:text-5xl lg:text-6xl text-[#0a0a0a] font-normal tracking-tight leading-[1.15]">
+            Nazywam się <span class="text-brand-green font-medium">Artur Bania</span>. Łączę nowoczesną fizjoterapię z wyciszeniem układu nerwowego w Zielonej Górze.
+          </h1>
+
+          <p class="text-lg text-[#737373] max-w-2xl leading-relaxed">
+            Wspólnie odnajdziemy źródło napięcia w Twoim ciele. Pomagam odzyskać pełną swobodę ruchu, komfort życia i głęboki spokój.
+          </p>
+
+          <div class="pt-4 flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
+            <a
+              href="/kontakt"
+              class="inline-flex items-center justify-center px-7 py-4 text-base font-medium text-white bg-brand-green hover:bg-brand-green-light rounded-xl shadow-sm hover:shadow-md transition-all duration-200 active:scale-[0.98]"
+            >
+              Umów wizytę
+            </a>
+            <a
+              href="#oferta"
+              class="inline-flex items-center justify-center px-7 py-4 text-base font-medium text-[#0a0a0a] bg-white hover:bg-[#f5f5f5] border border-[#e5e5e5] rounded-xl transition-all duration-200"
+            >
+              W czym mogę Ci pomóc?
+            </a>
+          </div>
+
+          <div class="pt-6 flex items-center gap-6 text-sm text-[#737373]">
+            <div class="flex items-center gap-2">
+              <svg class="w-5 h-5 text-brand-green" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+              </svg>
+              <span>Indywidualna terapia</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <svg class="w-5 h-5 text-brand-green" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+              </svg>
+              <span>Zielona Góra</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Hero Portrait Image -->
+        <div class="lg:col-span-5 relative">
+          <div class="relative mx-auto max-w-md lg:max-w-none">
+            <div class="absolute -inset-4 bg-gradient-to-tr from-brand-green/10 to-transparent rounded-3xl transform rotate-2"></div>
+            <div class="relative rounded-2xl overflow-hidden border border-[#e5e5e5] shadow-lg bg-white aspect-[4/5]">
+              <img
+                src="/images/ed20cAGCLeZHDCtWUAJaQqSchTk.png"
+                alt="Artur Bania – Fizjoterapia Zielona Góra"
+                class="w-full h-full object-cover object-top"
+                loading="eager"
+                fetchpriority="high"
+                width="1280"
+                height="1280"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- OFERTA: W CZYM MOGĘ CI POMÓC -->
+  <section id="oferta" class="py-20 md:py-32 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="max-w-3xl mb-16">
+        <span class="text-xs uppercase tracking-wider font-semibold text-brand-green">Obszary Wsparcia</span>
+        <h2 class="font-serif text-3xl sm:text-4xl lg:text-5xl text-[#0a0a0a] font-normal mt-2 mb-4">
+          W czym mogę Ci pomóc?
+        </h2>
+        <p class="text-[#737373] text-lg leading-relaxed">
+          W gabinecie łączę precyzję fizjoterapii z głębokim wyciszeniem układu nerwowego. Wspólnie odnajdziemy źródło napięcia w Twoim ciele.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <!-- Obszar 1 -->
+        <div class="bg-[#fafafa] p-8 rounded-2xl border border-[#e5e5e5] hover:border-brand-green/40 hover:shadow-md transition-all duration-200 flex flex-col justify-between">
+          <div>
+            <div class="w-12 h-12 rounded-xl bg-brand-green/10 text-brand-green flex items-center justify-center font-serif text-xl font-bold mb-6">
+              01
+            </div>
+            <h3 class="font-serif text-2xl text-[#0a0a0a] font-medium mb-3">
+              Terapia bólu i narządu ruchu
+            </h3>
+            <p class="text-sm text-[#737373] mb-6 leading-relaxed">
+              Klasyczna fizjoterapia zintegrowana z szerszym spojrzeniem na biomechanikę całego ciała.
+            </p>
+            <ul class="space-y-3 text-sm text-[#404040]">
+              <li class="flex items-start gap-2.5">
+                <span class="w-1.5 h-1.5 rounded-full bg-brand-green mt-1.5 flex-shrink-0"></span>
+                <span>Dolegliwości i bóle kręgosłupa (szyjny, piersiowy, lędźwiowy)</span>
+              </li>
+              <li class="flex items-start gap-2.5">
+                <span class="w-1.5 h-1.5 rounded-full bg-brand-green mt-1.5 flex-shrink-0"></span>
+                <span>Dyskopatia, rwa kulszowa oraz rwa ramienna</span>
+              </li>
+              <li class="flex items-start gap-2.5">
+                <span class="w-1.5 h-1.5 rounded-full bg-brand-green mt-1.5 flex-shrink-0"></span>
+                <span>Stany pourazowe (przeciążenia, skręcenia, urazy sportowe)</span>
+              </li>
+              <li class="flex items-start gap-2.5">
+                <span class="w-1.5 h-1.5 rounded-full bg-brand-green mt-1.5 flex-shrink-0"></span>
+                <span>Przewlekłe napięcia mięśniowe wynikające z siedzącego trybu życia</span>
+              </li>
+            </ul>
+          </div>
+          <div class="pt-8">
+            <a href="/cennik" class="text-sm font-medium text-brand-green hover:underline inline-flex items-center gap-1">
+              Zobacz cennik &rarr;
+            </a>
+          </div>
+        </div>
+
+        <!-- Obszar 2 -->
+        <div class="bg-[#fafafa] p-8 rounded-2xl border border-[#e5e5e5] hover:border-brand-green/40 hover:shadow-md transition-all duration-200 flex flex-col justify-between">
+          <div>
+            <div class="w-12 h-12 rounded-xl bg-brand-green/10 text-brand-green flex items-center justify-center font-serif text-xl font-bold mb-6">
+              02
+            </div>
+            <h3 class="font-serif text-2xl text-[#0a0a0a] font-medium mb-3">
+              Układ nerwowy i psychosomatyka
+            </h3>
+            <p class="text-sm text-[#737373] mb-6 leading-relaxed">
+              Subtelna praca na poziomie somatycznym, dedykowana wyciszeniu i regeneracji organizmu.
+            </p>
+            <ul class="space-y-3 text-sm text-[#404040]">
+              <li class="flex items-start gap-2.5">
+                <span class="w-1.5 h-1.5 rounded-full bg-brand-green mt-1.5 flex-shrink-0"></span>
+                <span>Terapia czaszkowo-krzyżowa (Cranio-Sacral Therapy)</span>
+              </li>
+              <li class="flex items-start gap-2.5">
+                <span class="w-1.5 h-1.5 rounded-full bg-brand-green mt-1.5 flex-shrink-0"></span>
+                <span>Dolegliwości jamy brzusznej (terapia wisceralna i stymulacja nerwu błędnego)</span>
+              </li>
+              <li class="flex items-start gap-2.5">
+                <span class="w-1.5 h-1.5 rounded-full bg-brand-green mt-1.5 flex-shrink-0"></span>
+                <span>Skutki przewlekłego stresu, chroniczne zmęczenie i przebyte traumy</span>
+              </li>
+              <li class="flex items-start gap-2.5">
+                <span class="w-1.5 h-1.5 rounded-full bg-brand-green mt-1.5 flex-shrink-0"></span>
+                <span>Migreny, napięciowe bóle głowy oraz zaburzenia snu</span>
+              </li>
+            </ul>
+          </div>
+          <div class="pt-8">
+            <a href="/cennik" class="text-sm font-medium text-brand-green hover:underline inline-flex items-center gap-1">
+              Zobacz cennik &rarr;
+            </a>
+          </div>
+        </div>
+
+        <!-- Obszar 3 -->
+        <div class="bg-[#fafafa] p-8 rounded-2xl border border-[#e5e5e5] hover:border-brand-green/40 hover:shadow-md transition-all duration-200 flex flex-col justify-between">
+          <div>
+            <div class="w-12 h-12 rounded-xl bg-brand-green/10 text-brand-green flex items-center justify-center font-serif text-xl font-bold mb-6">
+              03
+            </div>
+            <h3 class="font-serif text-2xl text-[#0a0a0a] font-medium mb-3">
+              Strefa głowy i żuchwy
+            </h3>
+            <p class="text-sm text-[#737373] mb-6 leading-relaxed">
+              Specjalistyczna fizjoterapia stomatologiczna i precyzyjne rozluźnianie obszaru twarzoczaszki.
+            </p>
+            <ul class="space-y-3 text-sm text-[#404040]">
+              <li class="flex items-start gap-2.5">
+                <span class="w-1.5 h-1.5 rounded-full bg-brand-green mt-1.5 flex-shrink-0"></span>
+                <span>Napięcia stawów skroniowo-żuchwowych</span>
+              </li>
+              <li class="flex items-start gap-2.5">
+                <span class="w-1.5 h-1.5 rounded-full bg-brand-green mt-1.5 flex-shrink-0"></span>
+                <span>Bruksizm, nawykowe zaciskanie zębów i zgrzytanie</span>
+              </li>
+              <li class="flex items-start gap-2.5">
+                <span class="w-1.5 h-1.5 rounded-full bg-brand-green mt-1.5 flex-shrink-0"></span>
+                <span>Bóle i sztywność karku powiązane z napięciem emocjonalnym</span>
+              </li>
+              <li class="flex items-start gap-2.5">
+                <span class="w-1.5 h-1.5 rounded-full bg-brand-green mt-1.5 flex-shrink-0"></span>
+                <span>Wsparcie w trakcie leczenia ortodontycznego</span>
+              </li>
+            </ul>
+          </div>
+          <div class="pt-8">
+            <a href="/cennik" class="text-sm font-medium text-brand-green hover:underline inline-flex items-center gap-1">
+              Zobacz cennik &rarr;
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- GABINET & ZDJĘCIA -->
+  <section class="py-20 bg-[#fafafa] border-y border-[#eeeeee]">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+        <div class="lg:col-span-5 space-y-6">
+          <span class="text-xs uppercase tracking-wider font-semibold text-brand-green">Bezpieczna Przestrzeń</span>
+          <h2 class="font-serif text-3xl sm:text-4xl text-[#0a0a0a] font-normal leading-tight">
+            Poczuj się bezpiecznie jeszcze przed wizytą.
+          </h2>
+          <p class="text-[#737373] text-base leading-relaxed">
+            W swoim gabinecie tworzę spokojną, nienachalną przestrzeń, w której Twoje ciało może odetchnąć, a proces powrotu do równowagi – naprawdę się rozpocząć.
+          </p>
+          <div class="pt-2">
+            <a
+              href="/o-mnie"
+              class="inline-flex items-center gap-2 text-brand-green font-medium hover:underline text-base"
+            >
+              Poznaj mnie bliżej i zobacz certyfikaty &rarr;
+            </a>
+          </div>
+        </div>
+
+        <div class="lg:col-span-7 grid grid-cols-2 gap-4">
+          <div class="rounded-2xl overflow-hidden border border-[#e5e5e5] shadow-sm aspect-[4/3]">
+            <img
+              src="/images/jSqGZpXi108LcD2yDcHd6Mb18ZE.jpg"
+              alt="Gabinet fizjoterapii FizjoArt Zielona Góra"
+              class="w-full h-full object-cover"
+              loading="lazy"
+            />
+          </div>
+          <div class="rounded-2xl overflow-hidden border border-[#e5e5e5] shadow-sm aspect-[4/3]">
+            <img
+              src="/images/mPg6WMsfywVXEeHBO1MpCosaxrw.jpg"
+              alt="Wnętrze gabinetu FizjoArt"
+              class="w-full h-full object-cover"
+              loading="lazy"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- OPINIE PACJENTÓW -->
+  <section class="py-20 md:py-32 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="max-w-3xl mb-16 text-center mx-auto">
+        <span class="text-xs uppercase tracking-wider font-semibold text-brand-green">Opinie Pacjentów</span>
+        <h2 class="font-serif text-3xl sm:text-4xl lg:text-5xl text-[#0a0a0a] font-normal mt-2 mb-4">
+          Co mówią pacjenci
+        </h2>
+        <p class="text-[#737373] text-lg">
+          Zaufanie, empatia i realne efekty terapii potwierdzone przez osoby, które odwiedziły gabinet.
+        </p>
+      </div>
+
+      <Reviews />
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="py-20 md:py-32 bg-[#fafafa] border-t border-[#eeeeee]">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="max-w-3xl mb-16 text-center mx-auto">
+        <span class="text-xs uppercase tracking-wider font-semibold text-brand-green">FAQ</span>
+        <h2 class="font-serif text-3xl sm:text-4xl lg:text-5xl text-[#0a0a0a] font-normal mt-2 mb-4">
+          Najczęściej zadawane pytania
+        </h2>
+        <p class="text-[#737373] text-lg">
+          Najważniejsze informacje przed pierwszą wizytą i rozpoczęciem terapii.
+        </p>
+      </div>
+
+      <FaqAccordion />
+
+      <div class="mt-16 max-w-xl mx-auto text-center p-8 bg-white rounded-2xl border border-[#e5e5e5] shadow-sm">
+        <h3 class="font-serif text-2xl text-[#0a0a0a] mb-2">Nie masz odpowiedzi na pytanie?</h3>
+        <p class="text-sm text-[#737373] mb-6">Skontaktuj się ze mną, a chętnie odpowiem na Twoje pytania.</p>
+        <a
+          href="/kontakt"
+          class="inline-flex items-center justify-center px-6 py-3 text-sm font-medium text-white bg-brand-green hover:bg-brand-green-light rounded-lg transition-colors"
+        >
+          Skontaktuj się
+        </a>
+      </div>
+    </div>
+  </section>
+</Layout>

@@ -1,0 +1,23 @@
+backend:
+  name: git-gateway
+  branch: main
+
+locale: 'pl'
+
+media_folder: "public/images"
+public_folder: "/images"
+
+collections:
+  - name: "blog"
+    label: "Artykuły Blogowe"
+    folder: "src/content/blog"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: "Tytuł artykułu", name: "title", widget: "string" }
+      - { label: "Data publikacji", name: "pubDate", widget: "date", format: "YYYY-MM-DD" }
+      - { label: "Kategoria", name: "category", widget: "string", default: "Porady" }
+      - { label: "Autor", name: "author", widget: "string", default: "Artur Bania" }
+      - { label: "Krótki opis (zajawka)", name: "description", widget: "text" }
+      - { label: "Zdjęcie wyróżniające", name: "image", widget: "image", default: "/images/17ktvQuSBDmjDTM3Gr3L7nOKHE.jpg" }
+      - { label: "Treść artykułu", name: "body", widget: "markdown" }

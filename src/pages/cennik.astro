@@ -1,0 +1,136 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const services = [
+  {
+    number: '01',
+    title: 'Pierwsza wizyta (Konsultacja + Terapia)',
+    desc: 'Dokładny wywiad zdrowotny, całościowe badanie funkcjonalne oraz pierwsza, indywidualnie dobrana terapia manualna lub somatyczna.',
+    time: '50 min',
+    price: '180 zł',
+    badge: 'Rekomendowane na start',
+    features: [
+      'Szczegółowy wywiad diagnostyczny',
+      'Badanie narządu ruchu i napięć',
+      'Indywidualna sesja terapeutyczna',
+      'Wskazówki i zalecenia autoterapii'
+    ]
+  },
+  {
+    number: '02',
+    title: 'Fizjoterapia i Praca z Ciałem (Kolejna wizyta)',
+    desc: 'Terapia manualna i celowana praca na tkankach głębokich – dopasowana elastycznie do aktualnych potrzeb i reakcji Twojego ciała.',
+    time: '50 min',
+    price: '180 zł',
+    badge: null,
+    features: [
+      'Kontynuacja i pogłębienie procesu leczenia',
+      'Mobilizacje stawowe i terapia tkanek miękkich',
+      'Praca z przewlekłym bólem i urazami',
+      'Monitorowanie postępów ruchomości'
+    ]
+  },
+  {
+    number: '03',
+    title: 'Terapia Czaszkowo-Krzyżowa',
+    desc: 'Głęboko wyciszająca sesja ukierunkowana na uregulowanie układu nerwowego, redukcję stresu i przywrócenie równowagi w całym organizmie.',
+    time: '60 min',
+    price: '180 zł',
+    badge: 'Głębokie wyciszenie',
+    features: [
+      'Subtelna praca osteopatyczna z układem nerwowym',
+      'Regulacja rytmu kranio-sakralnego',
+      'Łagodzenie migren, bruksizmu i stanów napięciowych',
+      'Głęboki relaks psychosomatyczny'
+    ]
+  }
+];
+---
+
+<Layout
+  title="Cennik fizjoterapii | fizjoArt"
+  description="Sprawdź cennik usług fizjoArt: fizjoterapii oraz terapii czaszkowo-krzyżowej w Zielonej Górze."
+>
+  <section class="py-16 md:py-24 bg-gradient-to-b from-white via-[#fafafa] to-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <!-- Nagłówek -->
+      <div class="max-w-3xl mx-auto text-center mb-16 md:mb-20">
+        <span class="text-xs uppercase tracking-wider font-semibold text-brand-green">Przejrzyste Zasady</span>
+        <h1 class="font-serif text-4xl sm:text-5xl lg:text-6xl text-[#0a0a0a] font-normal mt-2 mb-4 leading-tight">
+          Cennik Usług
+        </h1>
+        <p class="text-lg sm:text-xl text-[#737373] leading-relaxed">
+          Nie musisz wiedzieć, jakiej dokładnie terapii potrzebuje Twoje ciało. Podczas pierwszej wizyty wspólnie dobierzemy metody, które przyniosą Ci największą ulgę.
+        </p>
+      </div>
+
+      <!-- Kafelki Cennika -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 items-stretch">
+        {services.map((s) => (
+          <div class={`rounded-2xl p-8 flex flex-col justify-between transition-all duration-200 border ${
+            s.badge
+              ? 'bg-white border-brand-green/30 shadow-md ring-1 ring-brand-green/20 relative'
+              : 'bg-white border-[#e5e5e5] shadow-sm hover:shadow-md'
+          }`}>
+            <div>
+              <div class="flex items-center justify-between mb-4">
+                <span class="font-serif text-2xl font-bold text-brand-green">{s.number}</span>
+                {s.badge && (
+                  <span class="text-xs font-semibold px-2.5 py-1 bg-brand-green/10 text-brand-green rounded-full">
+                    {s.badge}
+                  </span>
+                )}
+              </div>
+
+              <h2 class="font-serif text-2xl text-[#0a0a0a] font-medium mb-3 leading-snug">
+                {s.title}
+              </h2>
+
+              <p class="text-sm text-[#737373] mb-6 leading-relaxed">
+                {s.desc}
+              </p>
+
+              <div class="py-4 border-y border-[#f0f0f0] mb-6 flex items-baseline justify-between">
+                <div>
+                  <span class="text-3xl font-serif font-bold text-[#0a0a0a]">{s.price}</span>
+                </div>
+                <span class="text-sm text-[#737373] font-medium">Czas: {s.time}</span>
+              </div>
+
+              <ul class="space-y-2.5 text-sm text-[#404040]">
+                {s.features.map((f) => (
+                  <li class="flex items-start gap-2.5">
+                    <svg class="w-4 h-4 text-brand-green mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                    </svg>
+                    <span>{f}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div class="pt-8 mt-6 border-t border-[#f5f5f5]">
+              <a
+                href="/kontakt"
+                class={`w-full inline-flex items-center justify-center py-3 px-5 text-sm font-medium rounded-xl transition-all duration-150 ${
+                  s.badge
+                    ? 'bg-brand-green hover:bg-brand-green-light text-white shadow-sm'
+                    : 'bg-[#f5f5f5] hover:bg-[#eaeaea] text-[#0a0a0a]'
+                }`}
+              >
+                Umów wizytę
+              </a>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <!-- Dodatkowa informacja -->
+      <div class="mt-16 text-center text-sm text-[#737373] max-w-2xl mx-auto">
+        <p>
+          Wszystkie wizyty odbywają się w gabinecie przy <strong>ul. Anieli Krzywoń 16 w Zielonej Górze</strong>. Płatność na miejscu (gotówka / BLIK / przelew).
+        </p>
+      </div>
+    </div>
+  </section>
+</Layout>

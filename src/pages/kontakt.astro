@@ -1,0 +1,201 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout
+  title="Kontakt i gabinet w Zielonej Górze | fizjoArt"
+  description="Skontaktuj się z fizjoArt i umów wizytę w gabinecie Artura Bani w Zielonej Górze przy ul. Anieli Krzywoń 16."
+  showPreFooter={false}
+>
+  <section class="py-16 md:py-24 bg-gradient-to-b from-white via-[#fafafa] to-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <!-- Nagłówek -->
+      <div class="max-w-3xl mb-16">
+        <span class="text-xs uppercase tracking-wider font-semibold text-brand-green">Kontakt</span>
+        <h1 class="font-serif text-4xl sm:text-5xl lg:text-6xl text-[#0a0a0a] font-normal mt-2 mb-4 leading-tight">
+          Skontaktuj się i umów wizytę
+        </h1>
+        <p class="text-lg text-[#737373] leading-relaxed">
+          Napisz lub zadzwoń. Chętnie odpowiem na Twoje pytania i wspólnie ustalimy dogodny termin spotkania w gabinecie w Zielonej Górze.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+        <!-- Formularz Netlify Forms -->
+        <div class="lg:col-span-7 bg-white p-8 sm:p-10 rounded-2xl border border-[#e5e5e5] shadow-sm">
+          <h2 class="font-serif text-2xl text-[#0a0a0a] mb-6">Napisz wiadomość</h2>
+
+          <!-- Formularz zintegrowany z Netlify Forms -->
+          <form
+            name="contact"
+            method="POST"
+            action="/kontakt?success=true"
+            data-netlify="true"
+            data-netlify-honeypot="bot-field"
+            class="space-y-6"
+          >
+            <!-- Honeypot anty-spam Netlify -->
+            <input type="hidden" name="form-name" value="contact" />
+            <p class="hidden">
+              <label>Nie wypełniaj tego pola: <input name="bot-field" /></label>
+            </p>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              <div>
+                <label for="firstName" class="block text-sm font-medium text-[#0a0a0a] mb-2">
+                  Imię <span class="text-brand-green">*</span>
+                </label>
+                <input
+                  type="text"
+                  id="firstName"
+                  name="firstName"
+                  required
+                  placeholder="Twoje imię"
+                  class="w-full px-4 py-3 rounded-xl border border-[#e5e5e5] focus:outline-none focus:ring-2 focus:ring-brand-green/30 focus:border-brand-green text-[#0a0a0a] placeholder-[#a3a3a3] transition-all"
+                />
+              </div>
+
+              <div>
+                <label for="lastName" class="block text-sm font-medium text-[#0a0a0a] mb-2">
+                  Nazwisko
+                </label>
+                <input
+                  type="text"
+                  id="lastName"
+                  name="lastName"
+                  placeholder="Twoje nazwisko"
+                  class="w-full px-4 py-3 rounded-xl border border-[#e5e5e5] focus:outline-none focus:ring-2 focus:ring-brand-green/30 focus:border-brand-green text-[#0a0a0a] placeholder-[#a3a3a3] transition-all"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label for="email" class="block text-sm font-medium text-[#0a0a0a] mb-2">
+                Adres e-mail <span class="text-brand-green">*</span>
+              </label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                required
+                placeholder="twoj@email.pl"
+                class="w-full px-4 py-3 rounded-xl border border-[#e5e5e5] focus:outline-none focus:ring-2 focus:ring-brand-green/30 focus:border-brand-green text-[#0a0a0a] placeholder-[#a3a3a3] transition-all"
+              />
+            </div>
+
+            <div>
+              <label for="phone" class="block text-sm font-medium text-[#0a0a0a] mb-2">
+                Numer telefonu
+              </label>
+              <input
+                type="tel"
+                id="phone"
+                name="phone"
+                placeholder="+48 000 000 000"
+                class="w-full px-4 py-3 rounded-xl border border-[#e5e5e5] focus:outline-none focus:ring-2 focus:ring-brand-green/30 focus:border-brand-green text-[#0a0a0a] placeholder-[#a3a3a3] transition-all"
+              />
+            </div>
+
+            <div>
+              <label for="message" class="block text-sm font-medium text-[#0a0a0a] mb-2">
+                Wiadomość <span class="text-brand-green">*</span>
+              </label>
+              <textarea
+                id="message"
+                name="message"
+                rows="5"
+                required
+                placeholder="Opisz krótko swój problem lub zapytaj o wolny termin..."
+                class="w-full px-4 py-3 rounded-xl border border-[#e5e5e5] focus:outline-none focus:ring-2 focus:ring-brand-green/30 focus:border-brand-green text-[#0a0a0a] placeholder-[#a3a3a3] transition-all resize-y"
+              ></textarea>
+            </div>
+
+            <!-- Komunikat sukcesu po przesłaniu -->
+            <div id="form-success" class="hidden p-4 rounded-xl bg-brand-green/10 text-brand-green text-sm font-medium">
+              Dziękuję! Twoja wiadomość została wysłana. Odpowiem najszybciej jak to możliwe.
+            </div>
+
+            <button
+              type="submit"
+              class="w-full sm:w-auto inline-flex items-center justify-center px-8 py-4 text-base font-medium text-white bg-brand-green hover:bg-brand-green-light rounded-xl shadow-sm hover:shadow transition-all duration-150 active:scale-[0.98]"
+            >
+              Wyślij wiadomość
+            </button>
+          </form>
+        </div>
+
+        <!-- Karty Informacyjne -->
+        <div class="lg:col-span-5 space-y-6">
+          <!-- Karta: Telefon -->
+          <div class="bg-white p-7 rounded-2xl border border-[#e5e5e5] shadow-sm flex items-start gap-5">
+            <div class="w-12 h-12 rounded-xl bg-brand-green/10 text-brand-green flex items-center justify-center flex-shrink-0">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+              </svg>
+            </div>
+            <div>
+              <span class="text-xs uppercase tracking-wider font-semibold text-[#737373]">Kontakt Telefoniczny</span>
+              <h3 class="text-lg font-medium text-[#0a0a0a] mt-1 mb-1">Zadzwoń lub napisz SMS</h3>
+              <a href="tel:+48663307553" class="text-xl font-bold text-brand-green hover:underline">
+                +48 663 307 553
+              </a>
+              <p class="text-xs text-[#737373] mt-1">Wolisz porozmawiać? Zadzwoń albo napisz.</p>
+            </div>
+          </div>
+
+          <!-- Karta: Email -->
+          <div class="bg-white p-7 rounded-2xl border border-[#e5e5e5] shadow-sm flex items-start gap-5">
+            <div class="w-12 h-12 rounded-xl bg-brand-green/10 text-brand-green flex items-center justify-center flex-shrink-0">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+              </svg>
+            </div>
+            <div>
+              <span class="text-xs uppercase tracking-wider font-semibold text-[#737373]">Poczta E-mail</span>
+              <h3 class="text-lg font-medium text-[#0a0a0a] mt-1 mb-1">Napisz w dowolnej chwili</h3>
+              <a href="mailto:artur.baniaa@gmail.com" class="text-base sm:text-lg font-semibold text-brand-green hover:underline break-all">
+                artur.baniaa@gmail.com
+              </a>
+              <p class="text-xs text-[#737373] mt-1">Odpowiadam zazwyczaj tego samego dnia.</p>
+            </div>
+          </div>
+
+          <!-- Karta: Adres Gabinetu -->
+          <div class="bg-white p-7 rounded-2xl border border-[#e5e5e5] shadow-sm flex items-start gap-5">
+            <div class="w-12 h-12 rounded-xl bg-brand-green/10 text-brand-green flex items-center justify-center flex-shrink-0">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+              </svg>
+            </div>
+            <div>
+              <span class="text-xs uppercase tracking-wider font-semibold text-[#737373]">Lokalizacja Gabinetu</span>
+              <h3 class="text-lg font-medium text-[#0a0a0a] mt-1 mb-1">Zielona Góra</h3>
+              <p class="text-base text-[#404040] font-medium">
+                Anieli Krzywoń 16, 65-534 Zielona Góra
+              </p>
+              <div class="mt-3">
+                <a
+                  href="https://maps.google.com/?q=Anieli+Krzywo%C5%84+16,+65-534+Zielona+G%C3%B3ra"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="text-xs font-semibold text-brand-green hover:underline inline-flex items-center gap-1"
+                >
+                  Otwórz w Mapach Google &rarr;
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    // Sprawdzenie parametru ?success=true po przesłaniu formularza
+    if (new URLSearchParams(window.location.search).get('success') === 'true') {
+      const banner = document.getElementById('form-success');
+      if (banner) banner.classList.remove('hidden');
+    }
+  </script>
+</Layout>

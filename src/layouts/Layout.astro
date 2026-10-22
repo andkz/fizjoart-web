@@ -1,0 +1,83 @@
+---
+import Navbar from '../components/Navbar.astro';
+import Footer from '../components/Footer.astro';
+import PreFooter from '../components/PreFooter.astro';
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  showPreFooter?: boolean;
+}
+
+const {
+  title = 'FizjoArt | Fizjoterapia i Terapia Czaszkowo-Krzyżowa Zielona Góra – Artur Bania',
+  description = 'Fizjoterapia i terapia czaszkowo-krzyżowa w Zielonej Górze. Artur Bania pomaga osobom zmagającym się z bólem, napięciem i skutkami przewlekłego stresu.',
+  image = '/images/1ujSFNRJBJoj0Exg89xwCSpoLY.png',
+  showPreFooter = true,
+} = Astro.props;
+
+const currentPath = Astro.url.pathname;
+const canonicalURL = new URL(Astro.url.pathname, Astro.site || 'https://fizjoart.netlify.app');
+---
+
+<!doctype html>
+<html lang="pl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalURL} />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="/images/cgnev8uqbNMguN20WWWYKBU6TTc.png" />
+
+    <!-- Open Graph / Facebook / LinkedIn -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={image} />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content={canonicalURL} />
+    <meta property="twitter:title" content={title} />
+    <meta property="twitter:description" content={description} />
+    <meta property="twitter:image" content={image} />
+
+    <!-- Google Fonts: EB Garamond & Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..700;1,400..700&family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Netlify Identity Widget for Decap CMS -->
+    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+  </head>
+  <body class="min-h-screen flex flex-col bg-white text-[#0a0a0a] antialiased selection:bg-brand-green/10 selection:text-brand-green">
+    <Navbar currentPath={currentPath} />
+    <main class="flex-grow">
+      <slot />
+    </main>
+    {showPreFooter && <PreFooter />}
+    <Footer />
+
+    <!-- Netlify Identity redirect script -->
+    <script is:inline>
+      if (window.netlifyIdentity) {
+        window.netlifyIdentity.on("init", (user) => {
+          if (!user) {
+            window.netlifyIdentity.on("login", () => {
+              document.location.href = "/admin/";
+            });
+          }
+        });
+      }
+    </script>
+  </body>
+</html>

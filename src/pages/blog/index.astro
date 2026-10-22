@@ -1,0 +1,83 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+
+const posts = await getCollection('blog');
+// Sort by date descending
+posts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+function formatDate(date: Date) {
+  return new Intl.DateTimeFormat('pl-PL', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric'
+  }).format(date);
+}
+---
+
+<Layout
+  title="Blog o fizjoterapii i pracy z ciałem | fizjoArt"
+  description="Artykuły fizjoArt o fizjoterapii, bólu, napięciu, układzie nerwowym i świadomej pracy z ciałem."
+>
+  <section class="py-16 md:py-24 bg-gradient-to-b from-white via-[#fafafa] to-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="max-w-3xl mb-16">
+        <span class="text-xs uppercase tracking-wider font-semibold text-brand-green">Edukacja i Wiedza</span>
+        <h1 class="font-serif text-4xl sm:text-5xl lg:text-6xl text-[#0a0a0a] font-normal mt-2 mb-4 leading-tight">
+          Blog o Fizjoterapii i Ciele
+        </h1>
+        <p class="text-lg text-[#737373] leading-relaxed">
+          Praktyczna wiedza o fizjoterapii, redukcji napięcia, wyciszeniu układu nerwowego i świadomym powrocie do pełnej sprawności.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {posts.map((post) => (
+          <article class="bg-white rounded-2xl border border-[#e5e5e5] overflow-hidden shadow-sm hover:shadow-md transition-all duration-200 flex flex-col justify-between group">
+            <div>
+              <div class="aspect-[16/10] overflow-hidden bg-[#f0f0f0]">
+                <img
+                  src={post.data.image}
+                  alt={post.data.title}
+                  class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  loading="lazy"
+                />
+              </div>
+
+              <div class="p-6 sm:p-7">
+                <div class="flex items-center gap-3 text-xs font-medium text-[#737373] mb-3">
+                  <span class="px-2.5 py-1 bg-brand-green/10 text-brand-green rounded-full font-semibold">
+                    {post.data.category}
+                  </span>
+                  <span>•</span>
+                  <time datetime={post.data.pubDate.toISOString()}>
+                    {formatDate(post.data.pubDate)}
+                  </time>
+                </div>
+
+                <h2 class="font-serif text-2xl text-[#0a0a0a] group-hover:text-brand-green transition-colors leading-snug mb-3 font-medium">
+                  <a href={`/blog/${post.id}`}>
+                    {post.data.title}
+                  </a>
+                </h2>
+
+                <p class="text-sm text-[#737373] leading-relaxed line-clamp-3">
+                  {post.data.description}
+                </p>
+              </div>
+            </div>
+
+            <div class="p-6 pt-0 sm:p-7 sm:pt-0">
+              <a
+                href={`/blog/${post.id}`}
+                class="text-sm font-semibold text-brand-green hover:underline inline-flex items-center gap-1.5"
+              >
+                Czytaj artykuł &rarr;
+              </a>
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+</Layout>

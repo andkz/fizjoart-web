@@ -1,0 +1,34 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout
+  title="Strona nie została znaleziona (404) | fizjoArt"
+  description="Przepraszamy, podana strona nie istnieje."
+>
+  <section class="py-24 md:py-36 bg-white text-center">
+    <div class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
+      <span class="text-sm uppercase tracking-wider font-semibold text-brand-green">Błąd 404</span>
+      <h1 class="font-serif text-4xl sm:text-6xl text-[#0a0a0a] font-normal mt-3 mb-6">
+        Nie znaleziono strony
+      </h1>
+      <p class="text-lg text-[#737373] mb-8 leading-relaxed">
+        Strona, której szukasz, mogła zostać przeniesiona, zmieniono jej adres lub nigdy nie istniała.
+      </p>
+      <div class="flex items-center justify-center gap-4">
+        <a
+          href="/"
+          class="inline-flex items-center justify-center px-6 py-3.5 text-sm font-medium text-white bg-brand-green hover:bg-brand-green-light rounded-xl transition-all shadow-sm"
+        >
+          Wróć do strony głównej
+        </a>
+        <a
+          href="/kontakt"
+          class="inline-flex items-center justify-center px-6 py-3.5 text-sm font-medium text-[#0a0a0a] bg-[#f5f5f5] hover:bg-[#eaeaea] rounded-xl transition-all"
+        >
+          Kontakt
+        </a>
+      </div>
+    </div>
+  </section>
+</Layout>
