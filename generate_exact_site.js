@@ -142,12 +142,14 @@ function loadBlogPosts() {
     const slug = file.replace(/\.md$/, '');
     const content = fs.readFileSync(path.join(contentBlogDir, file), 'utf8');
     const { data, content: body } = matter(content);
+    const today = new Date().toISOString().split('T')[0];
+    const postDate = data.pubDate || today;
     posts.push({
       slug,
       title: data.title || 'Bez tytułu',
       description: data.description || '',
-      pubDate: data.pubDate || '2026-01-01',
-      formattedDate: formatPolishDate(data.pubDate),
+      pubDate: postDate,
+      formattedDate: formatPolishDate(postDate),
       author: data.author || 'Artur Bania',
       category: data.category || 'Porady',
       image: data.image || '/images/17ktvQuSBDmjDTM3Gr3L7nOKHE.jpg',
@@ -320,6 +322,9 @@ for (const post of blogPosts) {
   postHtml = postHtml.replaceAll(originalTitle, post.title);
   postHtml = postHtml.replaceAll(originalDesc, post.description || post.title);
   postHtml = postHtml.replaceAll(originalDate, post.formattedDate);
+  if (post.author) {
+    postHtml = postHtml.replaceAll('Artur Bania', post.author);
+  }
   if (post.category) {
     // Replace category badge
     postHtml = postHtml.replaceAll('>Porady<', `>${post.category}<`);
