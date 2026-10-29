@@ -1,6 +1,8 @@
 backend:
-  name: git-gateway
+  name: github
+  repo: andkz/fizjoart-web
   branch: main
+  api_root: https://api.github.com
 
 locale: 'pl'
 
@@ -10,13 +12,14 @@ public_folder: "/images"
 collections:
   - name: "blog"
     label: "Artykuły Blogowe"
+    label_singular: "Artykuł"
     folder: "src/content/blog"
     create: true
     slug: "{{slug}}"
     fields:
       - { label: "Tytuł artykułu", name: "title", widget: "string" }
       - { label: "Data publikacji", name: "pubDate", widget: "date", format: "YYYY-MM-DD" }
-      - { label: "Kategoria", name: "category", widget: "string", default: "Porady" }
+      - { label: "Kategoria", name: "category", widget: "select", options: ["Porady", "Fizjoterapia", "Terapia czaszkowo-krzyżowa", "Zdrowie"], default: "Porady" }
       - { label: "Autor", name: "author", widget: "string", default: "Artur Bania" }
       - { label: "Krótki opis (zajawka)", name: "description", widget: "text" }
       - { label: "Zdjęcie wyróżniające", name: "image", widget: "image", default: "/images/17ktvQuSBDmjDTM3Gr3L7nOKHE.jpg" }

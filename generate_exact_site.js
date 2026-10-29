@@ -1,10 +1,14 @@
 import fs from 'fs';
 import path from 'path';
+import matter from 'gray-matter';
+import { marked } from 'marked';
 
-const distDir = 'c:/Users/kamil/Documents/antigravity/fizjoart-web/dist';
-const scrapedDir = 'c:/Users/kamil/Documents/antigravity/fizjoart-web/_scraped';
-const publicDir = 'c:/Users/kamil/Documents/antigravity/fizjoart-web/public';
-const assetMap = JSON.parse(fs.readFileSync('c:/Users/kamil/Documents/antigravity/fizjoart-web/asset_map.json', 'utf8'));
+const rootDir = 'c:/Users/kamil/Documents/antigravity/fizjoart-web';
+const distDir = path.join(rootDir, 'dist');
+const scrapedDir = path.join(rootDir, '_scraped');
+const publicDir = path.join(rootDir, 'public');
+const contentBlogDir = path.join(rootDir, 'src/content/blog');
+const assetMap = JSON.parse(fs.readFileSync(path.join(rootDir, 'asset_map.json'), 'utf8'));
 
 // Copy public folders to dist
 function copyDir(src, dest) {
@@ -24,16 +28,6 @@ function copyDir(src, dest) {
 
 copyDir(path.join(publicDir, 'images'), path.join(distDir, 'images'));
 copyDir(path.join(publicDir, 'admin'), path.join(distDir, 'admin'));
-
-const pageMappings = [
-  { src: 'home.html', dest: 'index.html' },
-  { src: '_o-mnie.html', dest: 'o-mnie/index.html' },
-  { src: '_cennik.html', dest: 'cennik/index.html' },
-  { src: '_kontakt.html', dest: 'kontakt/index.html' },
-  { src: '_nota-prawna.html', dest: 'nota-prawna/index.html' },
-  { src: '_blog.html', dest: 'blog/index.html' },
-  { src: '_blog_kiedy-warto-zg_C5_82osi_C4_87-si_C4_99-do-fizjoterapeuty.html', dest: 'blog/kiedy-warto-zglosic-sie-do-fizjoterapeuty/index.html' }
-];
 
 const instantHeadTags = `
   <meta name="view-transition" content="same-origin">
@@ -123,15 +117,52 @@ document.addEventListener('DOMContentLoaded', function() {
 </script>
 `;
 
-for (const { src, dest } of pageMappings) {
-  const srcPath = path.join(scrapedDir, src);
-  if (!fs.existsSync(srcPath)) {
-    console.warn('File not found:', srcPath);
-    continue;
+function formatPolishDate(dateStr) {
+  const months = ['sty', 'lut', 'mar', 'kwi', 'maj', 'cze', 'lip', 'sie', 'wrz', 'paź', 'lis', 'gru'];
+  if (!dateStr) return '';
+  const str = String(dateStr).trim();
+  if (str.includes('-')) {
+    const parts = str.split('T')[0].split('-');
+    const day = parseInt(parts[2], 10);
+    const month = parseInt(parts[1], 10) - 1;
+    const year = parts[0];
+    return `${day} ${months[month]} ${year}`;
   }
+  const d = new Date(str);
+  if (isNaN(d.getTime())) return str;
+  return `${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`;
+}
 
-  let html = fs.readFileSync(srcPath, 'utf8');
+// Read blog posts from src/content/blog
+function loadBlogPosts() {
+  const posts = [];
+  if (!fs.existsSync(contentBlogDir)) return posts;
+  const files = fs.readdirSync(contentBlogDir).filter(f => f.endsWith('.md'));
+  for (const file of files) {
+    const slug = file.replace(/\.md$/, '');
+    const content = fs.readFileSync(path.join(contentBlogDir, file), 'utf8');
+    const { data, content: body } = matter(content);
+    posts.push({
+      slug,
+      title: data.title || 'Bez tytułu',
+      description: data.description || '',
+      pubDate: data.pubDate || '2026-01-01',
+      formattedDate: formatPolishDate(data.pubDate),
+      author: data.author || 'Artur Bania',
+      category: data.category || 'Porady',
+      image: data.image || '/images/17ktvQuSBDmjDTM3Gr3L7nOKHE.jpg',
+      body: body || ''
+    });
+  }
+  // Sort descending by date
+  posts.sort((a, b) => new Date(b.pubDate) - new Date(a.pubDate));
+  return posts;
+}
 
+const blogPosts = loadBlogPosts();
+console.log(`Loaded ${blogPosts.length} blog posts from ${contentBlogDir}`);
+
+function cleanHtmlCommon(html) {
   // 1. Map asset URLs to local
   for (const [remote, local] of Object.entries(assetMap)) {
     html = html.replaceAll(remote, local);
@@ -157,7 +188,29 @@ for (const { src, dest } of pageMappings) {
   html = html.replace(/href="\.\/"/g, 'href="/"');
   html = html.replace(/href="\.\.\/"/g, 'href="/"');
 
-  // 4. Special handling for /kontakt/: Netlify Forms
+  // 4. Inject Speculation Rules, View Transitions, and Badge hiding into <head>
+  html = html.replace('</head>', `${instantHeadTags}\n</head>`);
+
+  // 5. Append interaction script before </body>
+  html = html.replace('</body>', `${interactionScript}\n</body>`);
+
+  return html;
+}
+
+// Static page mappings
+const staticPages = [
+  { src: 'home.html', dest: 'index.html' },
+  { src: '_o-mnie.html', dest: 'o-mnie/index.html' },
+  { src: '_cennik.html', dest: 'cennik/index.html' },
+  { src: '_kontakt.html', dest: 'kontakt/index.html' },
+  { src: '_nota-prawna.html', dest: 'nota-prawna/index.html' }
+];
+
+for (const { src, dest } of staticPages) {
+  const srcPath = path.join(scrapedDir, src);
+  if (!fs.existsSync(srcPath)) continue;
+  let html = fs.readFileSync(srcPath, 'utf8');
+
   if (src === '_kontakt.html') {
     html = html.replace(
       /<form class="framer-1pj9bh7"/g,
@@ -165,19 +218,133 @@ for (const { src, dest } of pageMappings) {
     );
   }
 
-  // 5. Inject Speculation Rules, View Transitions, and Badge hiding into <head>
-  html = html.replace('</head>', `${instantHeadTags}\n</head>`);
-
-  // 6. Append interaction script before </body>
-  html = html.replace('</body>', `${interactionScript}\n</body>`);
-
-  // Write to dest
+  html = cleanHtmlCommon(html);
   const destPath = path.join(distDir, dest);
-  const destDirPath = path.dirname(destPath);
-  if (!fs.existsSync(destDirPath)) fs.mkdirSync(destDirPath, { recursive: true });
-
+  fs.mkdirSync(path.dirname(destPath), { recursive: true });
   fs.writeFileSync(destPath, html, 'utf8');
-  console.log(`Processed ${src} -> ${dest} (${html.length} bytes)`);
+  console.log(`Generated static page: ${dest}`);
 }
 
-console.log('All exact Framer pages generated successfully with Instant Navigation.');
+// Generate /blog/index.html with all cards
+function generateBlogListing() {
+  const srcPath = path.join(scrapedDir, '_blog.html');
+  let html = fs.readFileSync(srcPath, 'utf8');
+
+  // Build cards HTML
+  const cardsHtml = blogPosts.map(post => `
+    <div class="framer-1tygonj-container">
+      <a class="framer-9YldO framer-G4ikZ framer-H5kJp framer-1kjk97w framer-v-1kjk97w framer-6pbzcx" data-framer-name="Default" href="/blog/${post.slug}/" style="background-color:var(--token-80553515-7ab0-44ac-b981-96d7680674fd, rgb(255, 255, 255));width:100%;border-bottom-left-radius:16px;border-bottom-right-radius:16px;border-top-left-radius:16px;border-top-right-radius:16px;box-shadow:0px 4px 8px 0px rgba(0, 0, 0, 0.08)">
+        <div class="framer-1ls4zx8" data-framer-name="Image Wrapper" style="border-bottom-left-radius:10px;border-bottom-right-radius:10px;border-top-left-radius:10px;border-top-right-radius:10px">
+          <div class="framer-ehb8t6" data-framer-name="Image" style="transform:none">
+            <div style="position:absolute;border-radius:inherit;corner-shape:inherit;top:0;right:0;bottom:0;left:0" data-framer-background-image-wrapper="true">
+              <img decoding="async" src="${post.image}" alt="${post.title}" style="display:block;width:100%;height:100%;border-radius:inherit;corner-shape:inherit;object-position:center;object-fit:cover" />
+            </div>
+          </div>
+          <div class="framer-1sz5eah" data-framer-name="Overlay" style="background-color:rgb(23, 23, 23);opacity:0"></div>
+        </div>
+        <div class="framer-16958fj" data-framer-name="Text Wrapper">
+          <div class="framer-1t02orb">
+            <div class="framer-1g4ac3s-container">
+              <div class="framer-bT280 framer-NZyzg framer-1a4fu0n framer-v-1a4fu0n" data-border="true" data-framer-name="Primary / L" style="--border-bottom-width:1px;--border-color:var(--token-cea865e2-a56c-48f4-b031-3e5821c6e8aa, rgb(229, 229, 229));--border-left-width:1px;--border-right-width:1px;--border-style:solid;--border-top-width:1px;background:linear-gradient(180deg, var(--token-1e4de996-fe4b-4667-88fc-284e9577f815, rgb(250, 250, 250)) 0%, var(--token-1e4de996-fe4b-4667-88fc-284e9577f815, rgb(250, 250, 250)) 100%);background-color:var(--token-1e4de996-fe4b-4667-88fc-284e9577f815, rgb(250, 250, 250));border-bottom-left-radius:8px;border-bottom-right-radius:8px;border-top-left-radius:8px;border-top-right-radius:8px">
+                <div class="framer-14tzjtf" data-framer-name="Label Wrapper">
+                  <div class="framer-1e0yg06" data-framer-component-type="RichTextContainer" style="--extracted-r6o4lv:var(--token-9054ee5e-347f-4b51-933a-5c869b1f745c, rgb(0, 71, 39));transform:none">
+                    <p class="framer-text framer-styles-preset-11v2ke7" data-styles-preset="nAZw8NEQ6" dir="auto" style="--framer-text-color:var(--extracted-r6o4lv, var(--token-9054ee5e-347f-4b51-933a-5c869b1f745c, rgb(0, 71, 39)))">${post.category}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="framer-957hzn" data-framer-component-type="RichTextContainer" style="--framer-link-text-color:rgb(0, 153, 255);--framer-link-text-decoration:underline;transform:none">
+              <p class="framer-text">${post.formattedDate}</p>
+            </div>
+          </div>
+          <div class="framer-6grcbr">
+            <div class="framer-1en3lq8" data-framer-component-type="RichTextContainer" style="transform:none">
+              <h2 class="framer-text framer-styles-preset-108a0d4" data-styles-preset="r_EkJQedq" style="--framer-text-alignment:left">${post.title}</h2>
+            </div>
+            <div class="framer-1oqcm3s" data-framer-component-type="RichTextContainer" style="--extracted-r6o4lv:var(--token-c9883a06-0714-4bde-a248-d9d8eb496918, rgb(64, 64, 64));--framer-link-text-color:rgb(0, 153, 255);--framer-link-text-decoration:underline;transform:none">
+              <p class="framer-text framer-styles-preset-vuyne3" data-styles-preset="GygTAX8TE" style="--framer-text-alignment:left;--framer-text-color:var(--extracted-r6o4lv, var(--token-c9883a06-0714-4bde-a248-d9d8eb496918, rgb(64, 64, 64)))">${post.description}</p>
+            </div>
+          </div>
+        </div>
+      </a>
+    </div>
+  `).join('\n');
+
+  // Replace collection list in _blog.html
+  const blogListStart = html.indexOf('<div class="framer-3ivwsy" data-framer-name="Blog List">');
+  if (blogListStart !== -1) {
+    const listEnd = html.indexOf('</div></div></div></section>', blogListStart);
+    if (listEnd !== -1) {
+      const beforeList = html.substring(0, blogListStart);
+      const afterList = html.substring(listEnd);
+      html = beforeList + `<div class="framer-3ivwsy" data-framer-name="Blog List"><div class="ssr-variant" style="display:flex;flex-wrap:wrap;gap:24px;width:100%;">${cardsHtml}</div>` + afterList;
+    }
+  }
+
+  html = cleanHtmlCommon(html);
+  const destPath = path.join(distDir, 'blog/index.html');
+  fs.mkdirSync(path.dirname(destPath), { recursive: true });
+  fs.writeFileSync(destPath, html, 'utf8');
+  console.log(`Generated blog listing: blog/index.html with ${blogPosts.length} cards`);
+}
+
+generateBlogListing();
+
+// Markdown to Framer RichText converter
+function convertMarkdownToFramerHtml(markdown) {
+  const rawHtml = marked.parse(markdown, { gfm: true, breaks: true });
+  // Add framer classes
+  let html = rawHtml;
+  html = html.replace(/<p>/g, '<p dir="auto" class="framer-text framer-styles-preset-vuyne3">');
+  html = html.replace(/<h2>/g, '<h2 dir="auto" class="framer-text framer-styles-preset-hx2mqj">');
+  html = html.replace(/<h3>/g, '<h3 dir="auto" class="framer-text framer-styles-preset-108a0d4">');
+  html = html.replace(/<ul>/g, '<ul style="padding-left: 24px; margin-bottom: 16px; color: #404040; line-height: 1.7;">');
+  html = html.replace(/<ol>/g, '<ol style="padding-left: 24px; margin-bottom: 16px; color: #404040; line-height: 1.7;">');
+  html = html.replace(/<li>/g, '<li style="margin-bottom: 8px;">');
+  html = html.replace(/<blockquote>/g, '<blockquote style="border-left: 3px solid #004727; padding-left: 16px; margin: 20px 0; font-style: italic; color: #555;">');
+  return html;
+}
+
+// Generate single post pages
+const postTemplatePath = path.join(scrapedDir, '_blog_kiedy-warto-zg_C5_82osi_C4_87-si_C4_99-do-fizjoterapeuty.html');
+const rawTemplate = fs.readFileSync(postTemplatePath, 'utf8');
+
+for (const post of blogPosts) {
+  let postHtml = rawTemplate;
+
+  const originalTitle = 'Kiedy warto zgłosić się do fizjoterapeuty?';
+  const originalDate = '1 lip 2026';
+  const originalDesc = 'Nie zawsze trzeba czekać, aż ból stanie się codziennym problemem. Przeczytaj artykuł fizjoArt o fizjoterapii, zdrowiu i świadomej pracy z ciałem.';
+
+  // 1. Replace Titles & Descriptions in Head & OpenGraph
+  postHtml = postHtml.replaceAll(originalTitle, post.title);
+  postHtml = postHtml.replaceAll(originalDesc, post.description || post.title);
+  postHtml = postHtml.replaceAll(originalDate, post.formattedDate);
+  if (post.category) {
+    // Replace category badge
+    postHtml = postHtml.replaceAll('>Porady<', `>${post.category}<`);
+  }
+
+  // 2. Replace Hero Image
+  if (post.image) {
+    postHtml = postHtml.replaceAll('/images/17ktvQuSBDmjDTM3Gr3L7nOKHE.jpg', post.image);
+    postHtml = postHtml.replaceAll('https://framerusercontent.com/images/17ktvQuSBDmjDTM3Gr3L7nOKHE.jpg', post.image);
+  }
+
+  // 3. Replace Article Content in all rich text containers framer-14sotxs
+  const formattedBodyHtml = convertMarkdownToFramerHtml(post.body);
+  
+  // Replace content inside framer-14sotxs
+  postHtml = postHtml.replace(/(<div class="framer-14sotxs"[^>]*>)([\s\S]*?)(<\/div><\/div><\/div><\/div><\/div>)/g, (match, open, oldContent, close) => {
+    return `${open}${formattedBodyHtml}${close}`;
+  });
+
+  postHtml = cleanHtmlCommon(postHtml);
+
+  const destPath = path.join(distDir, `blog/${post.slug}/index.html`);
+  fs.mkdirSync(path.dirname(destPath), { recursive: true });
+  fs.writeFileSync(destPath, postHtml, 'utf8');
+  console.log(`Generated blog post: blog/${post.slug}/index.html`);
+}
+
+console.log('✅ Site build complete! Exact Framer design & Decap CMS articles generated.');

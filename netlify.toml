@@ -2,18 +2,15 @@
   publish = "dist"
   command = "node generate_exact_site.js"
 
+[functions]
+  directory = "netlify/functions"
+
 [[redirects]]
   from = "/admin"
   to = "/admin/index.html"
   status = 200
 
-[[headers]]
-  for = "/images/*"
-  [headers.values]
-    Cache-Control = "public, max-age=31536000, immutable"
-
-[[headers]]
-  for = "/*"
-  [headers.values]
-    X-Content-Type-Options = "nosniff"
-    X-Frame-Options = "DENY"
+[[redirects]]
+  from = "/admin/*"
+  to = "/admin/index.html"
+  status = 200
