@@ -3,7 +3,7 @@ import path from 'path';
 import matter from 'gray-matter';
 import { marked } from 'marked';
 
-const rootDir = 'c:/Users/kamil/Documents/antigravity/fizjoart-web';
+const rootDir = process.cwd();
 const distDir = path.join(rootDir, 'dist');
 const scrapedDir = path.join(rootDir, '_scraped');
 const publicDir = path.join(rootDir, 'public');

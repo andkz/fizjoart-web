@@ -7,7 +7,6 @@ node_modules/
 .env
 .env.*
 .DS_Store
-_scraped/
 *.log
 
 # Local Netlify folder
