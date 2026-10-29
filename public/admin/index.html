@@ -193,7 +193,6 @@
   </button>
 
   <script>
-    const userStorageKey = 'netlify-cms-user';
     const authScreen = document.getElementById('auth-screen');
     const authForm = document.getElementById('auth-form');
     const passwordInput = document.getElementById('password');
@@ -201,13 +200,29 @@
     const errorBox = document.getElementById('error-box');
     const logoutBtn = document.getElementById('logout-btn');
 
+    function saveUserSession(token) {
+      const sessionData = JSON.stringify({
+        backendName: 'github',
+        token: token
+      });
+      localStorage.setItem('decap-cms-user', sessionData);
+      localStorage.setItem('netlify-cms-user', sessionData);
+    }
+
+    function clearUserSession() {
+      localStorage.removeItem('decap-cms-user');
+      localStorage.removeItem('netlify-cms-user');
+    }
+
     // Sprawdź czy użytkownik ma aktywny token w sesji
     function checkAuth() {
       try {
-        const stored = localStorage.getItem(userStorageKey);
+        const stored = localStorage.getItem('decap-cms-user') || localStorage.getItem('netlify-cms-user');
         if (stored) {
           const parsed = JSON.parse(stored);
           if (parsed && parsed.token) {
+            // Upewnij się, że oba klucze (zwłaszcza decap-cms-user) są zsynchronizowane
+            saveUserSession(parsed.token);
             // Użytkownik jest zalogowany -> ukryj formularz i załaduj Decap CMS
             authScreen.style.display = 'none';
             logoutBtn.style.display = 'block';
@@ -216,7 +231,7 @@
           }
         }
       } catch (e) {
-        localStorage.removeItem(userStorageKey);
+        clearUserSession();
       }
       return false;
     }
@@ -250,11 +265,8 @@
         const data = await res.json();
 
         if (res.ok && data.token) {
-          // Zapisz sesję Decap CMS w localStorage
-          localStorage.setItem(userStorageKey, JSON.stringify({
-            backendName: 'github',
-            token: data.token
-          }));
+          // Zapisz sesję w obu kluczach localStorage przed załadowaniem Decap CMS
+          saveUserSession(data.token);
           window.location.reload();
         } else {
           errorBox.textContent = data.error || 'Nieprawidłowe hasło.';
@@ -272,7 +284,7 @@
 
     // Obsługa wylogowania
     logoutBtn.addEventListener('click', function() {
-      localStorage.removeItem(userStorageKey);
+      clearUserSession();
       window.location.reload();
     });
 
