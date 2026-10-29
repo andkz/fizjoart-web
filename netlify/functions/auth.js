@@ -22,7 +22,7 @@ export async function handler(event, context) {
     return { statusCode: 400, headers, body: JSON.stringify({ error: 'Nieprawidłowe zapytanie JSON' }) };
   }
 
-  const expectedPassword = process.env.ADMIN_PASSWORD || 'Artur2026!';
+  const expectedPassword = process.env.ADMIN_PASSWORD || 'artur';
   if (!body.password || body.password !== expectedPassword) {
     return {
       statusCode: 401,
