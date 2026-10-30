@@ -113,6 +113,139 @@ document.addEventListener('DOMContentLoaded', function() {
       document.body.appendChild(overlay);
     });
   }
+
+  // 4. Interactive Carousels (Testimonials, Gallery, Certificates)
+  document.querySelectorAll('section[aria-roledescription="carousel"]').forEach(function(section) {
+    var ul = section.querySelector('ul.framer--carousel');
+    if (!ul) return;
+
+    var controls = section.querySelector('.framer--carousel-controls');
+    var prevBtn = controls ? controls.querySelector('button[aria-label="Previous"]') : null;
+    var nextBtn = controls ? controls.querySelector('button[aria-label="Next"]') : null;
+
+    function getStep() {
+      var firstLi = ul.querySelector('li');
+      if (!firstLi) return 360;
+      var style = window.getComputedStyle(ul);
+      var gap = parseFloat(style.gap || style.columnGap) || 16;
+      return firstLi.offsetWidth + gap;
+    }
+
+    function updateButtons() {
+      var sl = Math.ceil(ul.scrollLeft);
+      var maxScroll = ul.scrollWidth - ul.clientWidth;
+      if (maxScroll <= 5) {
+        if (prevBtn) { prevBtn.style.opacity = '0'; prevBtn.style.pointerEvents = 'none'; }
+        if (nextBtn) { nextBtn.style.opacity = '0'; nextBtn.style.pointerEvents = 'none'; }
+        return;
+      }
+      if (prevBtn) {
+        var isStart = sl <= 8;
+        prevBtn.style.opacity = isStart ? '0' : '1';
+        prevBtn.style.pointerEvents = isStart ? 'none' : 'auto';
+        prevBtn.style.cursor = isStart ? 'default' : 'pointer';
+      }
+      if (nextBtn) {
+        var isEnd = sl >= maxScroll - 8;
+        nextBtn.style.opacity = isEnd ? '0' : '1';
+        nextBtn.style.pointerEvents = isEnd ? 'none' : 'auto';
+        nextBtn.style.cursor = isEnd ? 'default' : 'pointer';
+      }
+    }
+
+    [prevBtn, nextBtn].forEach(function(btn) {
+      if (!btn) return;
+      btn.style.transition = 'opacity 0.25s ease, transform 0.2s ease, background-color 0.2s ease';
+      btn.addEventListener('mouseenter', function() {
+        if (btn.style.pointerEvents !== 'none' && btn.style.opacity !== '0') {
+          btn.style.transform = 'scale(1.1)';
+          btn.style.backgroundColor = 'rgba(0, 0, 0, 0.4)';
+        }
+      });
+      btn.addEventListener('mouseleave', function() {
+        btn.style.transform = 'none';
+        btn.style.backgroundColor = 'rgba(0, 0, 0, 0.2)';
+      });
+    });
+
+    if (prevBtn) {
+      prevBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        var step = getStep();
+        ul.scrollBy({ left: -step, behavior: 'smooth' });
+      });
+    }
+
+    if (nextBtn) {
+      nextBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        var step = getStep();
+        var maxScroll = ul.scrollWidth - ul.clientWidth;
+        if (ul.scrollLeft >= maxScroll - 12) {
+          ul.scrollTo({ left: 0, behavior: 'smooth' });
+        } else {
+          ul.scrollBy({ left: step, behavior: 'smooth' });
+        }
+      });
+    }
+
+    ul.addEventListener('scroll', updateButtons, { passive: true });
+    window.addEventListener('resize', updateButtons, { passive: true });
+    setTimeout(updateButtons, 100);
+
+    // Mouse drag-to-scroll
+    var isDown = false;
+    var startX = 0;
+    var scrollStart = 0;
+    var hasDragged = false;
+
+    ul.style.cursor = 'grab';
+
+    ul.addEventListener('mousedown', function(e) {
+      if (e.button !== 0) return;
+      isDown = true;
+      hasDragged = false;
+      startX = e.pageX - ul.offsetLeft;
+      scrollStart = ul.scrollLeft;
+      ul.style.cursor = 'grabbing';
+      ul.style.userSelect = 'none';
+      ul.style.scrollSnapType = 'none';
+    });
+
+    window.addEventListener('mousemove', function(e) {
+      if (!isDown) return;
+      var x = e.pageX - ul.offsetLeft;
+      var walk = (x - startX);
+      if (Math.abs(walk) > 5) {
+        hasDragged = true;
+      }
+      ul.scrollLeft = scrollStart - walk;
+    });
+
+    function stopDrag() {
+      if (!isDown) return;
+      isDown = false;
+      ul.style.cursor = 'grab';
+      ul.style.removeProperty('user-select');
+      ul.style.scrollSnapType = 'x mandatory';
+      updateButtons();
+    }
+
+    window.addEventListener('mouseup', stopDrag);
+
+    ul.addEventListener('click', function(e) {
+      if (hasDragged) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+    }, true);
+
+    ul.querySelectorAll('img').forEach(function(img) {
+      img.setAttribute('draggable', 'false');
+    });
+  });
 });
 </script>
 `;
