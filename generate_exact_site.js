@@ -9,6 +9,7 @@ const scrapedDir = path.join(rootDir, '_scraped');
 const publicDir = path.join(rootDir, 'public');
 const contentBlogDir = path.join(rootDir, 'src/content/blog');
 const assetMap = JSON.parse(fs.readFileSync(path.join(rootDir, 'asset_map.json'), 'utf8'));
+const BASE_PATH = (process.env.BASE_PATH || '').replace(/\/$/, '');
 
 // Copy public folders to dist
 function copyDir(src, dest) {
@@ -28,6 +29,7 @@ function copyDir(src, dest) {
 
 copyDir(path.join(publicDir, 'images'), path.join(distDir, 'images'));
 copyDir(path.join(publicDir, 'admin'), path.join(distDir, 'admin'));
+fs.writeFileSync(path.join(distDir, '.nojekyll'), '', 'utf8');
 
 const instantHeadTags = `
   <meta name="view-transition" content="same-origin">
@@ -40,14 +42,14 @@ const instantHeadTags = `
     "prerender": [
       {
         "source": "list",
-        "urls": ["/", "/o-mnie/", "/cennik/", "/kontakt/", "/blog/", "/nota-prawna/"],
+        "urls": ["${BASE_PATH}/", "${BASE_PATH}/o-mnie/", "${BASE_PATH}/cennik/", "${BASE_PATH}/kontakt/", "${BASE_PATH}/blog/", "${BASE_PATH}/nota-prawna/"],
         "eagerness": "moderate"
       }
     ],
     "prefetch": [
       {
         "source": "list",
-        "urls": ["/", "/o-mnie/", "/cennik/", "/kontakt/", "/blog/", "/nota-prawna/"],
+        "urls": ["${BASE_PATH}/", "${BASE_PATH}/o-mnie/", "${BASE_PATH}/cennik/", "${BASE_PATH}/kontakt/", "${BASE_PATH}/blog/", "${BASE_PATH}/nota-prawna/"],
         "eagerness": "immediate"
       }
     ]
@@ -105,11 +107,11 @@ document.addEventListener('DOMContentLoaded', function() {
       var overlay = document.createElement('div');
       overlay.id = 'mobile-menu-overlay';
       overlay.style.cssText = 'position:fixed;top:70px;left:0;width:100%;background:rgba(255,255,255,0.98);backdrop-filter:blur(20px);padding:24px;border-bottom:1px solid #eee;z-index:9999;box-shadow:0 10px 30px rgba(0,0,0,0.08);display:flex;flex-direction:column;gap:18px;';
-      overlay.innerHTML = '<a href="/o-mnie/" style="font-size:18px;font-weight:500;color:#0a0a0a;text-decoration:none;">O mnie</a>' +
-        '<a href="/cennik/" style="font-size:18px;font-weight:500;color:#0a0a0a;text-decoration:none;">Cennik</a>' +
-        '<a href="/blog/" style="font-size:18px;font-weight:500;color:#0a0a0a;text-decoration:none;">Blog</a>' +
-        '<a href="/kontakt/" style="font-size:18px;font-weight:500;color:#0a0a0a;text-decoration:none;">Kontakt</a>' +
-        '<a href="/kontakt/" style="margin-top:8px;padding:12px 20px;background:#004727;color:#fff;border-radius:8px;text-align:center;font-weight:500;text-decoration:none;">Umów Wizytę</a>';
+      overlay.innerHTML = '<a href="' + BASE_PATH + '/o-mnie/" style="font-size:18px;font-weight:500;color:#0a0a0a;text-decoration:none;">O mnie</a>' +
+        '<a href="' + BASE_PATH + '/cennik/" style="font-size:18px;font-weight:500;color:#0a0a0a;text-decoration:none;">Cennik</a>' +
+        '<a href="' + BASE_PATH + '/blog/" style="font-size:18px;font-weight:500;color:#0a0a0a;text-decoration:none;">Blog</a>' +
+        '<a href="' + BASE_PATH + '/kontakt/" style="font-size:18px;font-weight:500;color:#0a0a0a;text-decoration:none;">Kontakt</a>' +
+        '<a href="' + BASE_PATH + '/kontakt/" style="margin-top:8px;padding:12px 20px;background:#004727;color:#fff;border-radius:8px;text-align:center;font-weight:500;text-decoration:none;">Umów Wizytę</a>';
       document.body.appendChild(overlay);
     });
   }
@@ -300,10 +302,10 @@ console.log(`Loaded ${blogPosts.length} blog posts from ${contentBlogDir}`);
 function cleanHtmlCommon(html) {
   // 1. Map asset URLs to local
   for (const [remote, local] of Object.entries(assetMap)) {
-    html = html.replaceAll(remote, local);
+    html = html.replaceAll(remote, `${BASE_PATH}${local}`);
   }
   html = html.replace(/https:\/\/framerusercontent\.com\/images\/([a-zA-Z0-9_\-\.]+)/g, (match, filename) => {
-    return `/images/${filename}`;
+    return `${BASE_PATH}/images/${filename}`;
   });
 
   // 2. Remove Framer tracking & editor bar scripts
@@ -313,15 +315,15 @@ function cleanHtmlCommon(html) {
   html = html.replace(/<link rel="modulepreload"[^>]*>/gi, '');
 
   // 3. Standardize and normalize all navigation links to trailing slashes
-  html = html.replace(/href="(?:\.\/|\.\.\/|https:\/\/fizjoart\.framer\.media\/)?o-mnie\/?([#?][^"]*)?"/g, (m, q) => `href="/o-mnie/${q || ''}"`);
-  html = html.replace(/href="(?:\.\/|\.\.\/|https:\/\/fizjoart\.framer\.media\/)?cennik\/?([#?][^"]*)?"/g, (m, q) => `href="/cennik/${q || ''}"`);
-  html = html.replace(/href="(?:\.\/|\.\.\/|https:\/\/fizjoart\.framer\.media\/)?kontakt\/?([#?][^"]*)?"/g, (m, q) => `href="/kontakt/${q || ''}"`);
-  html = html.replace(/href="(?:\.\/|\.\.\/|https:\/\/fizjoart\.framer\.media\/)?blog\/?([#?][^"]*)?"/g, (m, q) => `href="/blog/${q || ''}"`);
-  html = html.replace(/href="(?:\.\/|\.\.\/|https:\/\/fizjoart\.framer\.media\/)?nota-prawna\/?([#?][^"]*)?"/g, (m, q) => `href="/nota-prawna/${q || ''}"`);
-  html = html.replace(/href="(?:\.\/|\.\.\/|https:\/\/fizjoart\.framer\.media\/)?blog\/kiedy-warto-(?:zgłosić|zg%C5%82osi%C4%87)-si(?:ę|%C4%99)-do-fizjoterapeuty\/?([#?][^"]*)?"/g, (m, q) => `href="/blog/kiedy-warto-zglosic-sie-do-fizjoterapeuty/${q || ''}"`);
-  html = html.replace(/href="https:\/\/fizjoart\.framer\.media\/?"/g, 'href="/"');
-  html = html.replace(/href="\.\/"/g, 'href="/"');
-  html = html.replace(/href="\.\.\/"/g, 'href="/"');
+  html = html.replace(/href="(?:\.\/|\.\.\/|https:\/\/fizjoart\.framer\.media\/)?o-mnie\/?([#?][^"]*)?"/g, (m, q) => `href="${BASE_PATH}/o-mnie/${q || ''}"`);
+  html = html.replace(/href="(?:\.\/|\.\.\/|https:\/\/fizjoart\.framer\.media\/)?cennik\/?([#?][^"]*)?"/g, (m, q) => `href="${BASE_PATH}/cennik/${q || ''}"`);
+  html = html.replace(/href="(?:\.\/|\.\.\/|https:\/\/fizjoart\.framer\.media\/)?kontakt\/?([#?][^"]*)?"/g, (m, q) => `href="${BASE_PATH}/kontakt/${q || ''}"`);
+  html = html.replace(/href="(?:\.\/|\.\.\/|https:\/\/fizjoart\.framer\.media\/)?blog\/?([#?][^"]*)?"/g, (m, q) => `href="${BASE_PATH}/blog/${q || ''}"`);
+  html = html.replace(/href="(?:\.\/|\.\.\/|https:\/\/fizjoart\.framer\.media\/)?nota-prawna\/?([#?][^"]*)?"/g, (m, q) => `href="${BASE_PATH}/nota-prawna/${q || ''}"`);
+  html = html.replace(/href="(?:\.\/|\.\.\/|https:\/\/fizjoart\.framer\.media\/)?blog\/kiedy-warto-(?:zgłosić|zg%C5%82osi%C4%87)-si(?:ę|%C4%99)-do-fizjoterapeuty\/?([#?][^"]*)?"/g, (m, q) => `href="${BASE_PATH}/blog/kiedy-warto-zglosic-sie-do-fizjoterapeuty/${q || ''}"`);
+  html = html.replace(/href="https:\/\/fizjoart\.framer\.media\/?"/g, `href="${BASE_PATH || '/'}"`);
+  html = html.replace(/href="\.\/"/g, `href="${BASE_PATH || '/'}"`);
+  html = html.replace(/href="\.\.\/"/g, `href="${BASE_PATH || '/'}"`);
 
   // 4. Inject Speculation Rules, View Transitions, and Badge hiding into <head>
   html = html.replace('</head>', `${instantHeadTags}\n</head>`);
@@ -349,7 +351,7 @@ for (const { src, dest } of staticPages) {
   if (src === '_kontakt.html') {
     html = html.replace(
       /<form class="framer-1pj9bh7"/g,
-      '<form class="framer-1pj9bh7" name="contact" method="POST" data-netlify="true" data-netlify-honeypot="bot-field" action="/kontakt/?success=true"><input type="hidden" name="form-name" value="contact" />'
+      `<form class="framer-1pj9bh7" name="contact" method="POST" data-netlify="true" data-netlify-honeypot="bot-field" action="${BASE_PATH}/kontakt/?success=true"><input type="hidden" name="form-name" value="contact" />`
     );
   }
 
@@ -366,13 +368,17 @@ function generateBlogListing() {
   let html = fs.readFileSync(srcPath, 'utf8');
 
   // Build cards HTML
-  const cardsHtml = blogPosts.map(post => `
+  const cardsHtml = blogPosts.map(post => {
+    const postImg = post.image.startsWith('http') || (BASE_PATH && post.image.startsWith(BASE_PATH))
+      ? post.image
+      : `${BASE_PATH}${post.image.startsWith('/') ? '' : '/'}${post.image}`;
+    return `
     <div class="framer-1tygonj-container">
-      <a class="framer-9YldO framer-G4ikZ framer-H5kJp framer-1kjk97w framer-v-1kjk97w framer-6pbzcx" data-framer-name="Default" href="/blog/${post.slug}/" style="background-color:var(--token-80553515-7ab0-44ac-b981-96d7680674fd, rgb(255, 255, 255));width:100%;border-bottom-left-radius:16px;border-bottom-right-radius:16px;border-top-left-radius:16px;border-top-right-radius:16px;box-shadow:0px 4px 8px 0px rgba(0, 0, 0, 0.08)">
+      <a class="framer-9YldO framer-G4ikZ framer-H5kJp framer-1kjk97w framer-v-1kjk97w framer-6pbzcx" data-framer-name="Default" href="${BASE_PATH}/blog/${post.slug}/" style="background-color:var(--token-80553515-7ab0-44ac-b981-96d7680674fd, rgb(255, 255, 255));width:100%;border-bottom-left-radius:16px;border-bottom-right-radius:16px;border-top-left-radius:16px;border-top-right-radius:16px;box-shadow:0px 4px 8px 0px rgba(0, 0, 0, 0.08)">
         <div class="framer-1ls4zx8" data-framer-name="Image Wrapper" style="border-bottom-left-radius:10px;border-bottom-right-radius:10px;border-top-left-radius:10px;border-top-right-radius:10px">
           <div class="framer-ehb8t6" data-framer-name="Image" style="transform:none">
             <div style="position:absolute;border-radius:inherit;corner-shape:inherit;top:0;right:0;bottom:0;left:0" data-framer-background-image-wrapper="true">
-              <img decoding="async" src="${post.image}" alt="${post.title}" style="display:block;width:100%;height:100%;border-radius:inherit;corner-shape:inherit;object-position:center;object-fit:cover" />
+              <img decoding="async" src="${postImg}" alt="${post.title}" style="display:block;width:100%;height:100%;border-radius:inherit;corner-shape:inherit;object-position:center;object-fit:cover" />
             </div>
           </div>
           <div class="framer-1sz5eah" data-framer-name="Overlay" style="background-color:rgb(23, 23, 23);opacity:0"></div>
@@ -403,7 +409,8 @@ function generateBlogListing() {
         </div>
       </a>
     </div>
-  `).join('\n');
+  `;
+  }).join('\n');
 
   // Replace collection list in _blog.html
   const blogListStart = html.indexOf('<div class="framer-3ivwsy" data-framer-name="Blog List">');
@@ -465,8 +472,11 @@ for (const post of blogPosts) {
 
   // 2. Replace Hero Image
   if (post.image) {
-    postHtml = postHtml.replaceAll('/images/17ktvQuSBDmjDTM3Gr3L7nOKHE.jpg', post.image);
-    postHtml = postHtml.replaceAll('https://framerusercontent.com/images/17ktvQuSBDmjDTM3Gr3L7nOKHE.jpg', post.image);
+    const postImg = post.image.startsWith('http') || (BASE_PATH && post.image.startsWith(BASE_PATH))
+      ? post.image
+      : `${BASE_PATH}${post.image.startsWith('/') ? '' : '/'}${post.image}`;
+    postHtml = postHtml.replaceAll('/images/17ktvQuSBDmjDTM3Gr3L7nOKHE.jpg', postImg);
+    postHtml = postHtml.replaceAll('https://framerusercontent.com/images/17ktvQuSBDmjDTM3Gr3L7nOKHE.jpg', postImg);
   }
 
   // 3. Replace Article Content in all rich text containers framer-14sotxs
